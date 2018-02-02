@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+    <ul id="pessoalist">
+        <!-- dynamic content goes here -->
+      </ul>
+  <script>
+    const api = axios.create({
+      baseURL:"http://localhost:3000"
+    })
+    api.get('/listpessoas').then(res => {
+      console.log(res)
+      res.data.map(e => {
+        const li = document.createElement("li")
+        li.innerHTML = `${e.id} - ${e.nome}`
+        document.getElementById("pessoalist").appendChild(li)
+      })
+    })
+  </script>
+</body>
+</html>

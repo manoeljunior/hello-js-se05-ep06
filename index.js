@@ -19,7 +19,6 @@ app.get('/listpessoas', (req, res) => {
 })
 
 app.get('/listpessoas/:id', (req, res) => {
-
   knex('pessoas').select().where(req.params).then(pessoas => {
     res.send(JSON.stringify(pessoas))
   }).catch(err => {
@@ -37,11 +36,27 @@ app.post('/addpessoa', (req, res) => {
   })
 })
 
+app.put('/updatepessoa/:id', (req, res) => {
+  id = req.params.id
+  knex('pessoas').update(req.query, 'id').where('id', id).then(id => {
+    res.send({
+      msg: 'Updated',
+      code: 200
+    })
+  }).catch(err => {
+    res.status(500).send(err)
+    console.log(err)
+  })
+})
+
 app.delete('/delpessoa/:id', (req, res) => {
   id = req.params.id
   console.log(id)
   knex('pessoas').del().where('id', id).then(() => {
-    res.send('removido')
+    res.send({
+      msg: 'Deleted',
+      code: 200
+    })
   }).catch(err => {
     res.status(500).send(err)
     console.log(err)
