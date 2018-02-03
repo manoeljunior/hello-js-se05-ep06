@@ -21,19 +21,19 @@ const err = res => err => res.status(500).send(err)
 app.get('/listpessoas', (req, res) => {
   knex('pessoas').select().then(pessoas => {
     res.send(JSON.stringify(pessoas))
-  }).catch(err)
+  }).catch(err(res))
 })
 
 app.get('/listpessoas/:id', (req, res) => {
   knex('pessoas').select().where(req.params).then(pessoas => {
     res.send(JSON.stringify(pessoas))
-  }).catch(err)
+  }).catch(err(res))
 })
 
 app.post('/addpessoa', (req, res) => {
-  knex('pessoas').insert(req.query, 'id').then(id => {
+  knex('pessoas').insert(req.body, 'id').then(id => {
     res.send(id)
-  }).catch(err)
+  }).catch(err(res))
 })
 
 app.put('/updatepessoa/:id', (req, res) => {

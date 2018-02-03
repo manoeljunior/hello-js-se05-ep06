@@ -5,24 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <title>Document</title>
 </head>
 <body>
-    <ul id="pessoalist">
-        <!-- dynamic content goes here -->
-      </ul>
+  <div id="app">
+    <form @submit.prevent="dosave">
+      <label>
+        Nome:
+        <input type="text" v-model="pessoa.nome">
+      </label>
+      <br><br>
+      <label>
+        Telefone:
+        <input type="text" v-model="pessoa.telefone">
+      </label>
+      <br><br>
+      <input type="submit">
+    </form>
+    
+    <br><br>
+    <span>Total: {{lista.length}}</span>
+    <ul>
+      <li v-for="item in lista">
+        {{item.nome}} - {{item.telefone}}
+      </li>
+    </ul>
+  </div>
+  
   <script>
     const api = axios.create({
       baseURL:"http://localhost:3000"
     })
-    api.get('/listpessoas').then(res => {
-      console.log(res)
-      res.data.map(e => {
-        const li = document.createElement("li")
-        li.innerHTML = `${e.id} - ${e.nome}`
-        document.getElementById("pessoalist").appendChild(li)
-      })
+
+    new Vue({
+      el: '#app',
+      data: {
+        lista: [],
+        pessoa: {
+          nome: '',
+          telefone: ''
+        }
+      },
+      created() {
+        this.dolist()
+      },
+      methods: {
+        dosave() {
+          api.post('/addpessoa', this.pessoa).then(result => {
+            this.dolist()
+          })
+        },
+        dolist() {
+          api.get('/listpessoas').then(result => {
+            this.lista = result.data
+          })
+        }
+      }
     })
+
   </script>
 </body>
 </html>
