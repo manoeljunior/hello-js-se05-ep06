@@ -25,10 +25,10 @@
     </form>
     
     <br><br>
-    <span>Total: {{lista.length}}</span>
+    <span>Total: {{pessoas.length}}</span>
     <ul>
-      <li v-for="item in lista">
-        {{item.nome}} - {{item.telefone}}
+      <li v-for="pessoa in pessoas">
+        {{pessoa.nome}} - {{pessoa.telefone}}
       </li>
     </ul>
   </div>
@@ -41,7 +41,7 @@
     new Vue({
       el: '#app',
       data: {
-        lista: [],
+        pessoas: [],
         pessoa: {
           nome: '',
           telefone: ''
@@ -58,7 +58,7 @@
         },
         dolist() {
           api.get('/listpessoas').then(result => {
-            this.lista = result.data
+            this.pessoas = result.data
           })
         }
       }
