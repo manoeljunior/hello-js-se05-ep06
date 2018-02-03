@@ -3,37 +3,37 @@ const cfg = require('./knexfile')
 const knex = require('knex')(cfg.development)
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const app = express()
+app.use(cors())
 app.use(express.static('public'))
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
+const err = res => err => res.status(500).send(err)
+// err => {
+//   res.status(500).send(err)
+//   console.log(err)
+// }
 
 app.get('/listpessoas', (req, res) => {
   knex('pessoas').select().then(pessoas => {
     res.send(JSON.stringify(pessoas))
-  }).catch(err => {
-    res.status(500).send(err)
-    console.log(err)
-  })
+  }).catch(err)
 })
 
 app.get('/listpessoas/:id', (req, res) => {
   knex('pessoas').select().where(req.params).then(pessoas => {
     res.send(JSON.stringify(pessoas))
-  }).catch(err => {
-    res.status(500).send(err)
-    console.log(err)
-  })
+  }).catch(err)
 })
 
 app.post('/addpessoa', (req, res) => {
   knex('pessoas').insert(req.query, 'id').then(id => {
     res.send(id)
-  }).catch(err => {
-    res.status(500).send(err)
-    console.log(err)
-  })
+  }).catch(err)
 })
 
 app.put('/updatepessoa/:id', (req, res) => {
